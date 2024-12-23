@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_DROP_DATABASE=true next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
@@ -15,14 +15,15 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
-    "@payloadcms/db-mongodb": "3.9.0",
-    "@payloadcms/next": "3.9.0",
-    "@payloadcms/payload-cloud": "3.9.0",
-    "@payloadcms/richtext-lexical": "3.9.0",
+    "@payloadcms/db-postgres": "3.11.0",
+    "@payloadcms/db-mongodb": "3.11.0",
+    "@payloadcms/next": "3.11.0",
+    "@payloadcms/payload-cloud": "3.11.0",
+    "@payloadcms/richtext-lexical": "3.11.0",
     "cross-env": "^7.0.3",
     "graphql": "^16.8.1",
     "next": "15.1.0",
-    "payload": "3.9.0",
+    "payload": "3.11.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "sharp": "0.32.6"
