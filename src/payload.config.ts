@@ -7,6 +7,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
+import { Customers } from './collections/Customers'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 
@@ -19,12 +20,13 @@ export default buildConfig({
     autoLogin: {
       email: 'john@doe.com',
       password: 'password',
+      prefillOnly: true,
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Customers],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -45,6 +47,12 @@ export default buildConfig({
     await payload.create({
       collection: 'users',
       data: { email: 'john@doe.com', password: 'password' },
+    })
+
+    // Seed Customers
+    await payload.create({
+      collection: 'customers',
+      data: { email: 'customer@test.com', password: 'password' },
     })
   },
 })
