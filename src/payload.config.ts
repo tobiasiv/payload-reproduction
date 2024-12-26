@@ -1,14 +1,14 @@
 // storage-adapter-import-placeholder
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { fileURLToPath } from 'url'
 
-import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -16,6 +16,10 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: Users.slug,
+    autoLogin: {
+      email: 'john@doe.com',
+      password: 'password',
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -26,12 +30,21 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URI,
+    },
   }),
   sharp,
   plugins: [
     payloadCloudPlugin(),
     // storage-adapter-placeholder
   ],
+  async onInit(payload) {
+    // Seed Users
+    await payload.create({
+      collection: 'users',
+      data: { email: 'john@doe.com', password: 'password' },
+    })
+  },
 })
