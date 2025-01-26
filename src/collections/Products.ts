@@ -2,11 +2,6 @@ import type { CollectionConfig } from 'payload'
 
 export const Products: CollectionConfig = {
   slug: 'products',
-  admin: {
-    components: {
-      beforeListTable: ['@/components/get.tsx'],
-    },
-  },
   fields: [
     {
       name: 'name',
