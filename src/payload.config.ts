@@ -7,8 +7,8 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
-import { Categories } from './collections/Categories'
-import { Products } from './collections/Products'
+import { Pages } from './collections/Pages'
+import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -25,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Categories, Products],
+  collections: [Users, Pages, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -51,42 +51,20 @@ export default buildConfig({
       },
     })
 
-    // Seed Categories
-    const blue = await payload.create({
-      collection: 'categories',
+    // Seed Posts
+    const post = await payload.create({
+      collection: 'posts',
       data: {
-        name: 'Blue',
+        title: 'Post 1',
       },
     })
 
-    const green = await payload.create({
-      collection: 'categories',
-      data: {
-        name: 'Green',
-      },
-    })
-
-    const red = await payload.create({
-      collection: 'categories',
-      data: {
-        name: 'Red',
-      },
-    })
-
-    // Seed Products
+    // Seed Pages
     await payload.create({
-      collection: 'products',
+      collection: 'pages',
       data: {
-        name: 'Product 1',
-        categories: [blue.id, green.id, red.id],
-      },
-    })
-
-    await payload.create({
-      collection: 'products',
-      data: {
-        name: 'Product 2',
-        categories: [blue.id, green.id, red.id],
+        title: 'Page 1',
+        post: post.id,
       },
     })
   },

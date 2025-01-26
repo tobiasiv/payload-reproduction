@@ -1,18 +1,18 @@
 import type { CollectionConfig } from 'payload'
 
-export const Products: CollectionConfig = {
-  slug: 'products',
+export const Pages: CollectionConfig = {
+  slug: 'pages',
   fields: [
     {
-      name: 'name',
+      name: 'title',
       type: 'text',
       required: true,
     },
     {
-      name: 'categories',
+      name: 'post',
       type: 'relationship',
-      relationTo: 'categories',
-      hasMany: true,
+      relationTo: 'posts',
+      hasMany: false,
     },
   ],
 }

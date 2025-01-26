@@ -1,10 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
-export const Categories: CollectionConfig = {
-  slug: 'categories',
+export const Posts: CollectionConfig = {
+  slug: 'posts',
   fields: [
     {
-      name: 'name',
+      name: 'title',
       type: 'text',
       required: true,
     },

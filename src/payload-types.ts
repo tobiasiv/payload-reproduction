@@ -12,8 +12,8 @@ export interface Config {
   };
   collections: {
     users: User;
-    categories: Category;
-    products: Product;
+    pages: Page;
+    posts: Post;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -21,8 +21,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
-    categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    products: ProductsSelect<false> | ProductsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -78,22 +78,22 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "pages".
  */
-export interface Category {
+export interface Page {
   id: number;
-  name: string;
+  title: string;
+  post?: (number | null) | Post;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
+ * via the `definition` "posts".
  */
-export interface Product {
+export interface Post {
   id: number;
-  name: string;
-  categories?: (number | Category)[] | null;
+  title: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -109,12 +109,12 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
-        relationTo: 'categories';
-        value: number | Category;
+        relationTo: 'pages';
+        value: number | Page;
       } | null)
     | ({
-        relationTo: 'products';
-        value: number | Product;
+        relationTo: 'posts';
+        value: number | Post;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -175,20 +175,20 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories_select".
+ * via the `definition` "pages_select".
  */
-export interface CategoriesSelect<T extends boolean = true> {
-  name?: T;
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  post?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products_select".
+ * via the `definition` "posts_select".
  */
-export interface ProductsSelect<T extends boolean = true> {
-  name?: T;
-  categories?: T;
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
   updatedAt?: T;
   createdAt?: T;
 }
