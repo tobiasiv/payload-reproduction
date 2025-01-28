@@ -7,8 +7,8 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
-import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
+import { Children } from './collections/Children'
+import { GrandChildren } from './collections/GrandChildren'
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -20,12 +20,13 @@ export default buildConfig({
     autoLogin: {
       email: 'user@admin.com',
       password: 'password',
+      prefillOnly: true,
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Pages, Posts],
+  collections: [Users, Children, GrandChildren],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -43,28 +44,56 @@ export default buildConfig({
   ],
   async onInit(payload) {
     // Seed Users
-    await payload.create({
+    const admin = await payload.create({
       collection: 'users',
       data: {
         email: 'user@admin.com',
         password: 'password',
+        role: 'admin',
       },
     })
 
-    // Seed Posts
-    const post = await payload.create({
-      collection: 'posts',
+    const editor = await payload.create({
+      collection: 'users',
       data: {
-        title: 'Post 1',
+        email: 'user@editor.com',
+        password: 'password',
+        role: 'editor',
       },
     })
 
-    // Seed Pages
+    // Seed Children
+    const child1 = await payload.create({
+      collection: 'children',
+      data: {
+        name: 'Child 1',
+        user: admin.id,
+      },
+    })
+
+    const child2 = await payload.create({
+      collection: 'children',
+      data: {
+        name: 'Child 2',
+        user: editor.id,
+      },
+    })
+
+    // Seed Grand Children
+
     await payload.create({
-      collection: 'pages',
+      collection: 'grand-children',
       data: {
-        title: 'Page 1',
-        post: post.id,
+        name: 'Grand Child 1',
+        child: child1.id,
+      },
+    })
+
+    await payload.create({
+      collection: 'grand-children',
+      data: {
+        name: 'Grand Child 2',
+        child: child2.id,
       },
     })
   },

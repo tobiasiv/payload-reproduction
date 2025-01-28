@@ -12,8 +12,8 @@ export interface Config {
   };
   collections: {
     users: User;
-    pages: Page;
-    posts: Post;
+    children: Child;
+    'grand-children': GrandChild;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -21,8 +21,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
+    children: ChildrenSelect<false> | ChildrenSelect<true>;
+    'grand-children': GrandChildrenSelect<false> | GrandChildrenSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -65,6 +65,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role: 'admin' | 'editor';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -78,22 +79,23 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
+ * via the `definition` "children".
  */
-export interface Page {
+export interface Child {
   id: number;
-  title: string;
-  post?: (number | null) | Post;
+  name: string;
+  user: number | User;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
+ * via the `definition` "grand-children".
  */
-export interface Post {
+export interface GrandChild {
   id: number;
-  title: string;
+  name: string;
+  child: number | Child;
   updatedAt: string;
   createdAt: string;
 }
@@ -109,12 +111,12 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
-        relationTo: 'pages';
-        value: number | Page;
+        relationTo: 'children';
+        value: number | Child;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: number | Post;
+        relationTo: 'grand-children';
+        value: number | GrandChild;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -163,6 +165,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -175,20 +178,21 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages_select".
+ * via the `definition` "children_select".
  */
-export interface PagesSelect<T extends boolean = true> {
-  title?: T;
-  post?: T;
+export interface ChildrenSelect<T extends boolean = true> {
+  name?: T;
+  user?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
+ * via the `definition` "grand-children_select".
  */
-export interface PostsSelect<T extends boolean = true> {
-  title?: T;
+export interface GrandChildrenSelect<T extends boolean = true> {
+  name?: T;
+  child?: T;
   updatedAt?: T;
   createdAt?: T;
 }
