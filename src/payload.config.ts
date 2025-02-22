@@ -2,13 +2,14 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { de } from '@payloadcms/translations/languages/de'
+import { en } from '@payloadcms/translations/languages/en'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
-import { Categories } from './collections/Categories'
-import { Products } from './collections/Products'
+import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -25,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Categories, Products],
+  collections: [Users, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -36,6 +37,10 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI,
     },
   }),
+  i18n: {
+    fallbackLanguage: 'de',
+    supportedLanguages: { de, en },
+  },
   sharp,
   plugins: [
     payloadCloudPlugin(),
@@ -48,45 +53,16 @@ export default buildConfig({
       data: {
         email: 'user@admin.com',
         password: 'password',
+        firstName: 'John ',
+        lastName: 'Doe',
       },
     })
 
-    // Seed Categories
-    const blue = await payload.create({
-      collection: 'categories',
-      data: {
-        name: 'Blue',
-      },
-    })
-
-    const green = await payload.create({
-      collection: 'categories',
-      data: {
-        name: 'Green',
-      },
-    })
-
-    const red = await payload.create({
-      collection: 'categories',
-      data: {
-        name: 'Red',
-      },
-    })
-
-    // Seed Products
+    // Seed Posts
     await payload.create({
-      collection: 'products',
+      collection: 'posts',
       data: {
-        name: 'Product 1',
-        categories: [blue.id, green.id, red.id],
-      },
-    })
-
-    await payload.create({
-      collection: 'products',
-      data: {
-        name: 'Product 2',
-        categories: [blue.id, green.id, red.id],
+        description: 'Lorem Ipsum',
       },
     })
   },
